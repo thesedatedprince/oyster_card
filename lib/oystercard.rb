@@ -17,11 +17,22 @@ class Oystercard
     @balance += deposit
   end
 
+  def deduct(fare)
+    @fare = fare
+    fail "Insufficient credit available" unless enough_credit?
+    @balance -= fare
+  end
+
   private
 
-  attr_reader :deposit
+  attr_reader :deposit, :fare
 
   def hit_limit?
     balance + deposit > limit
   end
+
+  def enough_credit?
+    balance - fare >= 0
+  end
+
 end

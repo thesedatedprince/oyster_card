@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+
   describe "#balance" do
     it "Checks that initial value = 0" do
       expect(subject.balance).to eq 0
@@ -24,4 +25,15 @@ describe Oystercard do
       expect(subject.limit).to eq 90
     end
   end
+
+  describe "#deduct" do
+    it "Deducts the fare amount from the balance" do
+      subject.instance_variable_set(:@balance, 50)
+      expect(subject.deduct(10)).to eq subject.balance
+    end
+    it "Raises an error when insufficient credit avaialable" do
+      expect{subject.deduct(10)}.to raise_error "Insufficient credit available"
+    end
+  end
+
 end
