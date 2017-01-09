@@ -1,6 +1,8 @@
 require 'oystercard'
 
 describe Oystercard do
+  let(:oystercard) {Oystercard.new}
+
   it 'responds to #balance' do
     expect(subject).to respond_to :balance
   end
@@ -16,7 +18,9 @@ describe Oystercard do
     subject.top_up(top_amnt)
     expect(subject.balance).to eq(orig_amnt + top_amnt)
   end
+
   it 'should not allow the user to top up above the specified limit' do
-    expect { subject.balance) }.to raise_error "Top up would exceed the card's balance limit of £#{Oystercard::LIMIT}"
+    allow(oystercard).to receive(:balance).and_return(0)
+    expect {oystercard.top_up(100)}.to raise_error "Top up would exceed the card's balance limit of £#{Oystercard::LIMIT}"
   end
 end
