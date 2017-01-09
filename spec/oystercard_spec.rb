@@ -59,6 +59,11 @@ describe Oystercard do
       subject.touch_in
       expect{subject.touch_in}.to raise_error "Card already in use"
     end
+
+    it "Expects the card to remember the station departed from" do
+      subject.touch_in
+      expect(subject.entry_station).to eq "test"
+    end
   end
 
   describe "#touch_out" do
