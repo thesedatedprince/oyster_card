@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
+  let(:station) {Station.new}
 
   it 'responds to #balance' do
     expect(subject).to respond_to :balance
@@ -36,19 +37,19 @@ describe Oystercard do
     expect(subject).to respond_to :touch_in
     expect(subject.touch_in).to eq true
   end
-  it 'should set the status to in journey after touching in' do
-    subject.top_up(10.0)
-    subject.touch_in
-    expect(subject.travelling).to eq true
-  end
+#  it 'should set the status to in journey after touching in' do
+  #  subject.top_up(10.0)
+  #  subject.touch_in
+  #  expect(subject).to be_in_journey
+  #end
   it 'should allow the user to touch out when leaving the station' do
     expect(subject).to respond_to :touch_out
-    expect(subject.touch_out).to eq false
+    expect(subject.touch_out).to eq nil
   end
-  it 'should set the in journey status to false after touching out' do
-    subject.touch_out
-    expect(subject.travelling).to eq false
-  end
+  #it 'should set the in journey status to false after touching out' do
+  #  subject.touch_out
+  #  expect(subject.travelling).to eq false
+#  end
 
   it 'should not allow the user to touch in if balance is less than fare' do
     allow(oystercard).to receive(:balance).and_return(6.5)
@@ -58,6 +59,17 @@ describe Oystercard do
     subject.top_up(10.0)
     subject.touch_in
     expect { subject.touch_out }.to change{ subject.balance }.by(-6.6)
+  end
+  it 'remembers the entry station after touch in' do
+    subject.top_up(10.0)
+    subject.touch_in(station)
+    expect(subject.entry_station).to eq station
+  end
+  it 'clears the entry station after touch out' do
+    subject.top_up(10.0)
+    subject.touch_in(station)
+    subject.touch_out
+    expect(subject.entry_station).to eq nil
   end
 
 end

@@ -10,3 +10,4 @@ gem 'rubocop', require: false
 gem 'pry', require: false
 gem 'byebug', require: false
 gem 'pry-byebug', require: false
+gem 'rake'
