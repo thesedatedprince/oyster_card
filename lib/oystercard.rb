@@ -1,3 +1,5 @@
+require_relative 'station'
+
 class Oystercard
 
   attr_reader :balance, :limit, :entry_station, :journeys
@@ -19,12 +21,13 @@ class Oystercard
     @balance += deposit
   end
 
-  def touch_in(station="entry_station")
+  def touch_in(station)
     fail "Card already in use" if @entry_station
+    fail "Not enough credit" unless enough_credit?
     @entry_station = station
   end
 
-  def touch_out(station="exit_station")
+  def touch_out(station)
     fail "Card not in use" unless @entry_station
     deduct(MINIMUM_CHARGE)
     journeys << {from: entry_station, to: station}

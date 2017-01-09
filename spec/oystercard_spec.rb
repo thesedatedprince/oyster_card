@@ -1,7 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
-  #let(:oystercard) {double :oystercard, :in_journey => false, in_journey?: false}
+
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
   let(:journey) { {from: entry_station, to: exit_station} }
@@ -30,24 +30,13 @@ describe Oystercard do
     end
   end
 
-=begin
-  describe "#deduct" do
-    it "Deducts the fare amount from the balance" do
-      subject.instance_variable_set(:@balance, 50)
-      expect(subject.deduct(10)).to eq subject.balance
-    end
-    it "Raises an error when insufficient credit avaialable" do
-      expect{subject.deduct(10)}.to raise_error "Insufficient credit available"
-    end
-  end
-=end
-
   describe "#in_journey?" do
     it "Check a new card is not in use" do
       expect(subject.entry_station).to eq nil
     end
 
     it "Check if a card is in use" do
+      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
@@ -55,18 +44,26 @@ describe Oystercard do
 
   describe "#touch_in(entry_station)" do
     it "Changes in_journey status to true when touching in" do
+      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
 
     it "Raises an error if card is already in use" do
+      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
 
     it "Expects the card to remember the station departed from" do
+      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to eq entry_station
+    end
+
+    it "Doesn't allow access when there is not enough credit" do
+      expect{subject.touch_in(entry_station)}.to raise_error "Not enough credit"
+
     end
   end
 
