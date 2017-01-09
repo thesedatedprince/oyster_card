@@ -47,4 +47,26 @@ describe Oystercard do
     end
   end
 
+  describe "#touch_in" do
+    it "Changes in_journey status to true when touching in" do
+      subject.touch_in
+      expect(subject.in_journey).to eq true
+    end
+    it "Raises an error if card is already in use" do
+      subject.touch_in
+      expect{subject.touch_in}.to raise_error "Card already in use"
+    end
+
+  end
+  describe "#touch_out" do
+    it "Changes in_journey status to false when touching out" do
+      subject.touch_in
+      expect(subject.touch_out).to eq false
+    end
+    it "Raises an error if card is not in use" do
+      expect{subject.touch_out}.to raise_error "Card not in use"
+    end
+
+  end
+
 end

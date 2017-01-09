@@ -22,7 +22,17 @@ class Oystercard
     fail "Insufficient credit available" unless enough_credit?
     @balance -= fare
   end
-  
+
+  def touch_in
+    fail "Card already in use" if @in_journey
+    @in_journey = true
+  end
+
+  def touch_out
+    fail "Card not in use" unless @in_journey
+    @in_journey = false
+  end
+
   private
 
   attr_reader :deposit, :fare
