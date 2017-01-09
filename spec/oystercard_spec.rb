@@ -40,19 +40,19 @@ describe Oystercard do
 
   describe "#in_journey?" do
     it "Check a new card is not in use" do
-      expect(subject.in_journey).to eq false
+      expect(subject.entry_station).to eq nil
     end
 
     it "Check if a card is in use" do
-      subject.instance_variable_set(:@in_journey, true)
-      expect(subject.in_journey).to eq true
+      subject.touch_in
+      expect(subject.entry_station).to_not eq nil
     end
   end
 
   describe "#touch_in" do
     it "Changes in_journey status to true when touching in" do
       subject.touch_in
-      expect(subject.in_journey).to eq true
+      expect(subject.entry_station).to_not eq nil
     end
 
     it "Raises an error if card is already in use" do
@@ -70,7 +70,7 @@ describe Oystercard do
     it "Changes in_journey status to false when touching out" do
       subject.top_up(50)
       subject.touch_in
-      expect(subject.touch_out).to eq false
+      expect(subject.entry_station).to_not eq nil
     end
 
     it "Raises an error if card is not in use" do
