@@ -64,8 +64,9 @@ describe Oystercard do
   end
   it 'remembers the entry station after touch in' do
     subject.top_up(10.0)
-    subject.touch_in(station)
-    expect(subject.entry_station).to eq station
+    subject.touch_in(entry_station)
+  #  allow(entry_station).to receive(:current_station)
+    expect(subject.entry_station).to eq entry_station.current_station
   end
   it 'clears the entry station after touch out' do
     subject.top_up(10.0)
@@ -81,7 +82,7 @@ describe Oystercard do
   end
   it 'adds a new journey to the history of journeys after touching in and out' do
     subject.top_up(10.0)
-    journey = [entry_station, exit_station]
+    journey = [entry_station.current_station, exit_station.current_station]
     subject.touch_in(entry_station)
     subject.touch_out(exit_station)
     expect(subject.journeys.has_value?(journey)).to eq true

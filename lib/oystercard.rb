@@ -21,14 +21,14 @@ class Oystercard
 
   def touch_in(station = Station.new)
     raise "Insufficient balance on card." if @balance < FARE
-    @entry_station = station
+    @entry_station = station.current_station
     in_journey?
   end
 
   def touch_out(station = Station.new)
     deduct
     @journey_count += 1
-    @exit_station = station
+    @exit_station = station.current_station
     journeys["Journey #{@journey_count}"] = [@entry_station, @exit_station]
     @entry_station = nil
   end
