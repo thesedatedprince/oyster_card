@@ -34,4 +34,23 @@ describe Oystercard do
     subject.deduct
     expect(subject.balance).to eq(orig_amnt - ded_amnt)
   end
+  it 'should allow the user to touch in when entering the station' do
+    expect(subject).to respond_to :touch_in
+    expect(subject.touch_in).to eq true
+  end
+  it 'should set the status to in journey after touching in' do
+    subject.touch_in
+    expect(subject.travelling).to eq true
+  end
+  it 'should allow the user to touch out when leaving the station' do
+    expect(subject).to respond_to :touch_out
+    expect(subject.touch_out).to eq false
+  end
+  it 'should set the in journey status to false after touching out' do
+    subject.touch_out
+    expect(subject.travelling).to eq false
+  end
+
+
+
 end
