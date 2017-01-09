@@ -7,4 +7,16 @@ describe Oystercard do
   it 'checks that a new card has a balance' do
     expect(subject.balance).not_to be_nil
   end
+
+  it 'responds to #top_up' do
+    expect(subject).to respond_to(:top_up).with(1).argument
+  end
+    it 'should add money to balance' do
+      top_amnt = 3
+      orig_amnt = subject.balance
+      subject.top_up(top_amnt)
+      expect(subject.balance).to eq(orig_amnt + top_amnt)
+  end
+
+
 end
