@@ -1,7 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
-
+  #let(:oystercard) {double :oystercard, :in_journey => false, in_journey?: false}
   describe "#balance" do
     it "Checks that initial value = 0" do
       expect(subject.balance).to eq 0
@@ -33,6 +33,17 @@ describe Oystercard do
     end
     it "Raises an error when insufficient credit avaialable" do
       expect{subject.deduct(10)}.to raise_error "Insufficient credit available"
+    end
+  end
+
+  describe "#in_journey?" do
+    it "Check a new card is not in use" do
+      expect(subject.in_journey).to eq false
+    end
+
+    it "Check if a card is in use" do
+      subject.instance_variable_set(:@in_journey, true)
+      expect(subject.in_journey).to eq true
     end
   end
 
