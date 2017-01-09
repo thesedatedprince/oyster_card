@@ -1,7 +1,7 @@
 require './lib/station.rb'
 
 class Oystercard
-  attr_reader :balance, :travelling, :entry_station
+  attr_reader :balance, :travelling, :entry_station, :exit_station, :journeys
 
   LIMIT = 90.0
   FARE = 6.6
@@ -9,6 +9,9 @@ class Oystercard
   def initialize
     @balance = 5.00
     @entry_station = nil
+    @exit_station = nil
+    @journeys = Hash.new
+    @journey_count = 0
   end
 
   def top_up(add_money)
@@ -22,8 +25,11 @@ class Oystercard
     in_journey?
   end
 
-  def touch_out
+  def touch_out(station = Station.new)
     deduct
+    @journey_count += 1
+    @exit_station = station
+    journeys["Journey #{@journey_count}"] = [@entry_station, @exit_station]
     @entry_station = nil
   end
 
