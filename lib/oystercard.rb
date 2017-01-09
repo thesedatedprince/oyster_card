@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative 'journey'
 
 class Oystercard
 
@@ -8,11 +9,11 @@ class Oystercard
   DEFAULT_LIMIT = 90
   MINIMUM_CHARGE = 1
 
-  def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT)
+  def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT, journeys=Journey.new)
     @balance = balance
     @limit = limit
     @entry_station = nil
-    @journeys = []
+    @journeys = journeys
   end
 
   def top_up(deposit)
@@ -30,8 +31,8 @@ class Oystercard
   def touch_out(station)
     fail "Card not in use" unless @entry_station
     deduct(MINIMUM_CHARGE)
-    journeys << {from: entry_station, to: station}
-    @entry_station = nil
+    @journeys.add_journey({from: entry_station, to: station})
+    #@entry_station = nil
   end
 
   private

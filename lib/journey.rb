@@ -5,5 +5,7 @@ class Journey
     @journeys = journeys
   end
 
-  
+  def add_journey(journey)
+    @journeys << journey
+  end
 end
