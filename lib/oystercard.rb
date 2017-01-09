@@ -14,16 +14,13 @@ class Oystercard
     @balance += add_money.to_f
   end
 
-  def deduct
-    @balance -= FARE
-  end
-
   def touch_in
     raise "Insufficient balance on card." if @balance < FARE
     @travelling = true
   end
 
   def touch_out
+    deduct
     @travelling = false
   end
 
@@ -31,4 +28,9 @@ class Oystercard
   def in_journey?
     @travelling
   end
+
+  def deduct
+    @balance -= FARE
+  end
+
 end
