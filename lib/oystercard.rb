@@ -5,7 +5,7 @@ class Oystercard
   FARE = 6.6
 
   def initialize
-    @balance = 1.0
+    @balance = 5.00
     @travelling = false
   end
 
@@ -19,6 +19,7 @@ class Oystercard
   end
 
   def touch_in
+    raise "Insufficient balance on card." if @balance < FARE
     @travelling = true
   end
 
