@@ -26,6 +26,7 @@ describe Oystercard do
     end
   end
 
+=begin
   describe "#deduct" do
     it "Deducts the fare amount from the balance" do
       subject.instance_variable_set(:@balance, 50)
@@ -35,6 +36,7 @@ describe Oystercard do
       expect{subject.deduct(10)}.to raise_error "Insufficient credit available"
     end
   end
+=end
 
   describe "#in_journey?" do
     it "Check a new card is not in use" do
@@ -52,21 +54,29 @@ describe Oystercard do
       subject.touch_in
       expect(subject.in_journey).to eq true
     end
+
     it "Raises an error if card is already in use" do
       subject.touch_in
       expect{subject.touch_in}.to raise_error "Card already in use"
     end
-
   end
+
   describe "#touch_out" do
     it "Changes in_journey status to false when touching out" do
+      subject.top_up(50)
       subject.touch_in
       expect(subject.touch_out).to eq false
     end
+
     it "Raises an error if card is not in use" do
       expect{subject.touch_out}.to raise_error "Card not in use"
     end
 
+    it "Deducts correct fare for the journey" do
+      subject.top_up(50)
+      subject.touch_in
+      expect{subject.touch_out}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
+    end
   end
 
 end

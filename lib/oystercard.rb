@@ -4,6 +4,7 @@ class Oystercard
 
   DEFAULT_BALANCE = 0
   DEFAULT_LIMIT = 90
+  MINIMUM_CHARGE = 1
 
   def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT)
     @balance = balance
@@ -17,12 +18,6 @@ class Oystercard
     @balance += deposit
   end
 
-  def deduct(fare)
-    @fare = fare
-    fail "Insufficient credit available" unless enough_credit?
-    @balance -= fare
-  end
-
   def touch_in
     fail "Card already in use" if @in_journey
     @in_journey = true
@@ -30,19 +25,24 @@ class Oystercard
 
   def touch_out
     fail "Card not in use" unless @in_journey
+    deduct(MINIMUM_CHARGE)
     @in_journey = false
   end
 
   private
 
-  attr_reader :deposit, :fare
+  attr_reader :deposit
 
   def hit_limit?
     balance + deposit > limit
   end
 
   def enough_credit?
-    balance - fare >= 0
+    balance >= MINIMUM_CHARGE
   end
 
+  def deduct(fare)
+    fail "Insufficient credit available" unless enough_credit?
+    @balance -= fare
+  end
 end
