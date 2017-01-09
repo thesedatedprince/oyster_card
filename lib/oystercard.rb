@@ -1,6 +1,6 @@
 class Oystercard
 
-  attr_reader :balance, :limit, :entry_station
+  attr_reader :balance, :limit, :entry_station, :journeys
 
   DEFAULT_BALANCE = 0
   DEFAULT_LIMIT = 90
@@ -10,6 +10,7 @@ class Oystercard
     @balance = balance
     @limit = limit
     @entry_station = nil
+    @journeys = []
   end
 
   def top_up(deposit)
@@ -18,14 +19,15 @@ class Oystercard
     @balance += deposit
   end
 
-  def touch_in(station="test")
+  def touch_in(station="entry_station")
     fail "Card already in use" if @entry_station
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(station="exit_station")
     fail "Card not in use" unless @entry_station
     deduct(MINIMUM_CHARGE)
+    journeys << {from: entry_station, to: station}
     @entry_station = nil
   end
 

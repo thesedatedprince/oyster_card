@@ -2,6 +2,10 @@ require 'oystercard'
 
 describe Oystercard do
   #let(:oystercard) {double :oystercard, :in_journey => false, in_journey?: false}
+  let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
+  let(:journey) { {from: entry_station, to: exit_station} }
+
   describe "#balance" do
     it "Checks that initial value = 0" do
       expect(subject.balance).to eq 0
@@ -44,44 +48,52 @@ describe Oystercard do
     end
 
     it "Check if a card is in use" do
-      subject.touch_in
+      subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
   end
 
-  describe "#touch_in" do
+  describe "#touch_in(entry_station)" do
     it "Changes in_journey status to true when touching in" do
-      subject.touch_in
+      subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
 
     it "Raises an error if card is already in use" do
-      subject.touch_in
-      expect{subject.touch_in}.to raise_error "Card already in use"
+      subject.touch_in(entry_station)
+      expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
 
     it "Expects the card to remember the station departed from" do
-      subject.touch_in
-      expect(subject.entry_station).to eq "test"
+      subject.touch_in(entry_station)
+      expect(subject.entry_station).to eq entry_station
     end
   end
 
-  describe "#touch_out" do
+  describe "#touch_out(exit_station)" do
     it "Changes in_journey status to false when touching out" do
       subject.top_up(50)
-      subject.touch_in
+      subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
 
     it "Raises an error if card is not in use" do
-      expect{subject.touch_out}.to raise_error "Card not in use"
+      expect{subject.touch_out(exit_station)}.to raise_error "Card not in use"
     end
 
     it "Deducts correct fare for the journey" do
       subject.top_up(50)
-      subject.touch_in
-      expect{subject.touch_out}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
+      subject.touch_in(entry_station)
+      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
     end
   end
 
+  describe "#journeys" do
+    it "Stores past journeys" do
+      subject.top_up(50)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys).to include journey
+    end
+  end
 end
