@@ -26,14 +26,7 @@ describe Oystercard do
     expect {subject.top_up(Oystercard::LIMIT + 1)}.to raise_error "Top up would exceed the card's balance limit of £#{Oystercard::LIMIT}"
   end
 
-  it 'should deduct money from the card' do
-    ded_amnt = Oystercard::FARE
-    subject.top_up(10)
-    orig_amnt = subject.balance
-    subject.touch_in
-    subject.touch_out
-    expect(subject.balance).to eq(orig_amnt - ded_amnt)
-  end
+
   it 'should allow the user to touch in when entering the station' do
     subject.top_up(10.0)
     expect(subject).to respond_to :touch_in
@@ -41,29 +34,17 @@ describe Oystercard do
     allow(start_station).to receive(:station_name).and_return("Camden")
     expect(subject.touch_in).to eq start_station.station_name
   end
-#  it 'should set the status to in journey after touching in' do
-  #  subject.top_up(10.0)
-  #  subject.touch_in
-  #  expect(subject).to be_in_journey
-  #end
+
   it 'should allow the user to touch out when leaving the station' do
     expect(subject).to respond_to :touch_out
     expect(subject.touch_out).to eq nil
   end
-  #it 'should set the in journey status to false after touching out' do
-  #  subject.touch_out
-  #  expect(subject.travelling).to eq false
-#  end
 
   it 'should not allow the user to touch in if balance is less than fare' do
     allow(subject).to receive(:balance).and_return(6.5)
     expect {subject.touch_in}.to raise_error "Insufficient balance on card."
   end
-  it 'should deduct the fare upon completion of the journey' do
-    subject.top_up(10.0)
-    subject.touch_in
-    expect { subject.touch_out }.to change{ subject.balance }.by(-6.6)
-  end
+
 
 
 
