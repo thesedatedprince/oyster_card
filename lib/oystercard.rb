@@ -1,15 +1,17 @@
 require_relative 'station'
 require_relative 'journey'
+require_relative 'journey_log'
 
 class Oystercard
-  attr_reader :journey
+  attr_reader :journeys
   attr_accessor :balance
 
   LIMIT = 90.0
 
-  def initialize(journey = Journey.new)
+  def initialize(journey = JourneyLog.new)
     @balance = 5.00
     @journey = journey
+    @journeys = journey.journeys
   end
 
   def top_up(add_money)
@@ -18,14 +20,11 @@ class Oystercard
   end
 
   def touch_in(card = self, station = Station.new)
-    raise "Insufficient balance on card." if @balance < Journey::PENALTY_FARE
+    raise 'Insufficient balance on card.' if @balance < Journey::PENALTY_FARE
     @journey.journey_start(card, station)
   end
 
   def touch_out(card = self, station = Station.new)
     @journey.journey_end(card, station)
   end
-
-
-
 end
