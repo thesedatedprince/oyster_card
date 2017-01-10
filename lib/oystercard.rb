@@ -34,8 +34,8 @@ class Oystercard
   def touch_out(station)
     fail "Card not in use" unless in_journey?
     @currentjourney.add_journey(station)
-    deduct
-    add_journey
+    deduct_fare
+    store_journey
     station
   end
 
@@ -53,7 +53,7 @@ class Oystercard
     balance >= Journey::MINIMUM_CHARGE
   end
 
-  def deduct
+  def deduct_fare
     fail "Insufficient credit available" unless enough_credit?
     @balance -= @currentjourney.fare
     @injourney = false
@@ -63,8 +63,9 @@ class Oystercard
     @injourney
   end
 
-  def add_journey
+  def store_journey
     @journeys << @currentjourney
     @currentjourney = nil
+    @journeys
   end
 end
