@@ -1,10 +1,10 @@
 require 'oystercard'
 
 describe Oystercard do
-  let(:oystercard) {Oystercard.new}
+  subject {Oystercard.new}
   let(:station) {Station.new}
-  let(:entry_station) {Station.new}
-  let(:exit_station) {Station.new}
+  let(:start_station) {Station.new}
+  let(:end_station) {Station.new}
 
   it 'responds to #balance' do
     expect(subject).to respond_to :balance
@@ -54,8 +54,8 @@ describe Oystercard do
 #  end
 
   it 'should not allow the user to touch in if balance is less than fare' do
-    allow(oystercard).to receive(:balance).and_return(6.5)
-    expect {oystercard.touch_in}.to raise_error "Insufficient balance on card."
+    allow(subject).to receive(:balance).and_return(6.5)
+    expect {subject.touch_in}.to raise_error "Insufficient balance on card."
   end
   it 'should deduct the fare upon completion of the journey' do
     subject.top_up(10.0)
@@ -64,9 +64,9 @@ describe Oystercard do
   end
   it 'remembers the entry station after touch in' do
     subject.top_up(10.0)
-    subject.touch_in(entry_station)
-  #  allow(entry_station).to receive(:current_station)
-    expect(subject.entry_station).to eq entry_station.current_station
+    subject.touch_in(start_station)
+  #  allow(entry_station).to receive(:station_name)
+    expect(subject.entry_station).to eq start_station.station_name
   end
   it 'clears the entry station after touch out' do
     subject.top_up(10.0)
@@ -74,18 +74,6 @@ describe Oystercard do
     subject.touch_out
     expect(subject.entry_station).to eq nil
   end
-  it 'has an empty journey history by default' do
-    expect(subject.journeys).to be_empty
-  end
-  it 'stores a list of journeys' do
-    expect(subject).to respond_to :journeys
-  end
-  it 'adds a new journey to the history of journeys after touching in and out' do
-    subject.top_up(10.0)
-    journey = [entry_station.current_station, exit_station.current_station]
-    subject.touch_in(entry_station)
-    subject.touch_out(exit_station)
-    expect(subject.journeys.has_value?(journey)).to eq true
-  end
+
 
 end

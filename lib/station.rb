@@ -1,14 +1,13 @@
 class Station
 
-
   STATIONS = {zone_one: ["Charing Cross", "Picadilly"],
               zone_two: ["Camden", "Baker Street"]}
 
-  attr_reader :current_zone, :current_station
+  attr_reader :zone, :station_name
 
   def initialize
-    @current_zone = STATIONS.keys.sample
-    @current_station = STATIONS[@current_zone].sample
+    @zone = STATIONS.keys.sample
+    @station_name = STATIONS[@zone].sample
   end
 
 
