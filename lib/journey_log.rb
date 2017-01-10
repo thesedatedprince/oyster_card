@@ -1,6 +1,6 @@
 class JourneyLog
 
-  attr_reader :journeys
+  attr_reader :journeys, :entry_station, :current_list
 
   def initialize
     @entry_station = nil
@@ -12,12 +12,13 @@ class JourneyLog
   def journey_start(card, station)
     @entry_station = station.station_name
     @entry_zone = station.zone
+    current_journey(@entry_station, @entry_zone, true)
     @card = card
   end
 
   def journey_end(card, station)
     Journey.new.fare(card, @entry_station)
-    record_journey(station.station_name, station.zone)
+    current_journey(station.station_name, station.zone, false)
     @entry_station = nil
   end
 
@@ -33,6 +34,15 @@ class JourneyLog
 
   def in_journey?
     true if @entry_station
+  end
+
+  def current_journey(name, zone, outgoing)
+    if outgoing
+    @outbound = "#{zone}: #{name}"
+    else
+    @inbound = "#{zone}: #{name}"
+    end
+    @current_list = [@outbound, @inbound]
   end
 
 end
