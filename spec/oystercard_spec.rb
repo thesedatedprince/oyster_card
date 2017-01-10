@@ -37,6 +37,8 @@ describe Oystercard do
   it 'should allow the user to touch in when entering the station' do
     subject.top_up(10.0)
     expect(subject).to respond_to :touch_in
+    allow(subject).to receive(:touch_in).and_return("Camden")
+    allow(start_station).to receive(:station_name).and_return("Camden")
     expect(subject.touch_in).to eq start_station.station_name
   end
 #  it 'should set the status to in journey after touching in' do

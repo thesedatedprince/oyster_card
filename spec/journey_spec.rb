@@ -12,9 +12,11 @@ describe Journey do
   end
   it 'adds a new journey to the history of journeys after touching in and out' do
     card.top_up(10.0)
-    current_journey = ["#{start_station.zone}: #{start_station.station_name}", "#{end_station.zone}: #{end_station.station_name}"]
-    card.touch_in(start_station)
-    card.touch_out(end_station)
+    card.touch_in
+    entry_test = subject.entry_station
+    card.touch_out
+    exit_test = subject.exit_station
+    current_journey = ["#{subject.entry_zone}: #{entry_test}", "#{subject.exit_zone}: #{exit_test}"]
     expect(subject.journeys.has_value?(current_journey)).to eq true
   end
   it 'remembers the entry station after touch in' do
