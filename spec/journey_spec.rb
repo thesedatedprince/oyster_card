@@ -1,7 +1,6 @@
 require 'journey'
 
 describe Journey do
-  #let(:full_journey) {teststation}
 
   let(:teststation) {double :station, name: "entry_station", zone: 1}
   let(:full_journey) {double :journey, entry_station: teststation}
@@ -11,10 +10,6 @@ describe Journey do
       expect(subject.journeys).to eq nil
     end
   end
-
-  # it "Check for existing journeys" do
-  #   expect(full_journey.journeys).to eq nil #[{from: "entry_station", to: "exit_station"}]
-  # end
 
   context "It calculates the fare" do
     it "charges the minimum fare" do

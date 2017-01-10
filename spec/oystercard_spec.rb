@@ -30,10 +30,6 @@ describe Oystercard do
 
 
   describe "card does not allow new journey if already in use" do
-    #it "Check a new card is not in use" do
-    #  expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
-     #end
-
     it "Check if a card is in use" do
       subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
@@ -49,7 +45,6 @@ describe Oystercard do
 
     it "Raises an error if card is already in use" do
       subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
-      #subject.instance_variable_set(:@currentjourney, entry_station)
       subject.touch_in(entry_station)
       expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
@@ -69,7 +64,7 @@ describe Oystercard do
     it "Changes in_journey status to false when touching out" do
       subject.top_up(50)
       subject.touch_in(entry_station)
-      expect(subject.entry_station).to_not eq nil
+      expect(subject.entry_station).to_not eq []
     end
 
     it "Raises an error if card is not in use" do
@@ -83,17 +78,5 @@ describe Oystercard do
       expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-Journey::MINIMUM_CHARGE)
     end
   end
-
-=begin
-  describe "#journeys" do
-    it "Stores past journeys" do
-      #allow(journey).to receive(:journey).and_return(journey)
-      subject.top_up(50)
-      subject.touch_in(entry_station)
-      subject.touch_out(exit_station)
-      expect(subject.journeys).to include journey
-    end
-  end
-=end
 
 end

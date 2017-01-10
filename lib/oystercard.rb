@@ -11,7 +11,6 @@ class Oystercard
   def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT) #, journeys=Journey.new)
     @balance = balance
     @limit = limit
-    #@entry_station = nil
     @journeys = []
     @injourney = false
   end
@@ -26,30 +25,21 @@ class Oystercard
 
     fail "Card already in use" if in_journey?
     @currentjourney ||= Journey.new(station)
-    #.entry_station != station
-    #@currentjourney ||= Journey.new(station)
     fail "Not enough credit" unless enough_credit?
     @injourney = true
-
-
-    #@currentjourney.entry_station = station
     @entry_station = station
   end
 
   def touch_out(station)
-    @currentjourney ||= Journey.new(station)
     fail "Card not in use" unless in_journey?
+    @currentjourney.add_journey(station)
     deduct(Journey::MINIMUM_CHARGE)
-    #@journeys.add_journey(station)
-    @injourney = false
+    @journeys << @currentjourney
     @currentjourney = nil
-    #@entry_station = nil
-
+    station
   end
 
-  def in_journey?
-    @injourney
-  end
+
 
   private
 
@@ -66,5 +56,10 @@ class Oystercard
   def deduct(fare)
     fail "Insufficient credit available" unless enough_credit?
     @balance -= fare
+    @injourney = false
+  end
+
+  def in_journey?
+    @injourney
   end
 end
