@@ -16,9 +16,15 @@ class Journey
   def journey_end(station)
     @journey_count += 1
     @exit_station = station.station_name
-    journeys["Journey #{@journey_count}"] = ["#{station.zone}: #{@entry_station}", "#{station.zone}: #{@exit_station}",]
+    @journeys["Journey #{@journey_count}"] = ["#{station.zone}: #{@entry_station}", "#{station.zone}: #{@exit_station}",]
     @entry_station = nil
   end
 
+  private
+  def in_journey?
+    if @entry_station
+      true
+    end
+  end
 
 end

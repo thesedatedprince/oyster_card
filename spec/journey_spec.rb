@@ -1,7 +1,7 @@
 require 'journey'
 
 describe Journey do
-  let(:card) {Oystercard.new}
+  let(:card) {Oystercard.new(subject)}
   let(:start_station) {Station.new}
   let(:end_station) {Station.new}
   it 'it stores information about the users journeys' do
@@ -12,12 +12,21 @@ describe Journey do
   end
   it 'adds a new journey to the history of journeys after touching in and out' do
     card.top_up(10.0)
-    #journey = [start_station.station_name, end_station.station_name]
-    journey = ["#{start_station.zone}: #{start_station.station_name}", "#{end_station.zone}: #{end_station.station_name}",]
-    journey = ["zone_two: Charing Cross", "zone_two: Baker Street"]
+    current_journey = ["#{start_station.zone}: #{start_station.station_name}", "#{end_station.zone}: #{end_station.station_name}"]
     card.touch_in(start_station)
     card.touch_out(end_station)
-    expect(subject.journeys.has_value?(journey)).to eq true
+    expect(subject.journeys.has_value?(current_journey)).to eq true
+  end
+  it 'remembers the entry station after touch in' do
+    card.top_up(10.0)
+    card.touch_in(start_station)
+    expect(subject.entry_station).to eq start_station.station_name
+  end
+  it 'clears the entry station after touch out' do
+    card.top_up(10.0)
+    card.touch_in(start_station)
+    card.touch_out
+    expect(subject.entry_station).to eq nil
   end
 
 end

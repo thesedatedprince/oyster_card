@@ -20,7 +20,6 @@ class Oystercard
   def touch_in(station = Station.new)
     raise "Insufficient balance on card." if @balance < FARE
     @journey.journey_start(station)
-    in_journey?
   end
 
   def touch_out(station = Station.new)
@@ -29,11 +28,6 @@ class Oystercard
   end
 
   private
-  def in_journey?
-    if @entry_station
-      true
-    end
-  end
 
   def deduct
     @balance -= FARE

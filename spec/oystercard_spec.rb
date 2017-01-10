@@ -37,7 +37,7 @@ describe Oystercard do
   it 'should allow the user to touch in when entering the station' do
     subject.top_up(10.0)
     expect(subject).to respond_to :touch_in
-    expect(subject.touch_in).to eq true
+    expect(subject.touch_in).to eq start_station.station_name
   end
 #  it 'should set the status to in journey after touching in' do
   #  subject.top_up(10.0)
@@ -62,18 +62,7 @@ describe Oystercard do
     subject.touch_in
     expect { subject.touch_out }.to change{ subject.balance }.by(-6.6)
   end
-  it 'remembers the entry station after touch in' do
-    subject.top_up(10.0)
-    subject.touch_in(start_station)
-  #  allow(entry_station).to receive(:station_name)
-    expect(subject.entry_station).to eq start_station.station_name
-  end
-  it 'clears the entry station after touch out' do
-    subject.top_up(10.0)
-    subject.touch_in(station)
-    subject.touch_out
-    expect(subject.entry_station).to eq nil
-  end
+
 
 
 end
