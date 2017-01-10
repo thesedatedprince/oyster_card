@@ -4,12 +4,11 @@ require_relative 'journey'
 class Oystercard
 
   attr_reader :balance, :limit, :journeys, :currentjourney, :injourney
-  # :entry_station,
 
   DEFAULT_BALANCE = 0
   DEFAULT_LIMIT = 90
 
-  def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT) #, journeys=Journey.new)
+  def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT)
     @balance = balance
     @limit = limit
     @journeys = []
@@ -38,8 +37,6 @@ class Oystercard
     store_journey
     station
   end
-
-
 
   private
 
