@@ -7,12 +7,11 @@ class Oystercard
 
   DEFAULT_BALANCE = 0
   DEFAULT_LIMIT = 90
-  MINIMUM_CHARGE = 1
 
   def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT, journeys=Journey.new)
     @balance = balance
     @limit = limit
-    @entry_station = nil
+    #@entry_station = nil
     @journeys = journeys
   end
 
@@ -26,13 +25,14 @@ class Oystercard
     fail "Card already in use" if @entry_station
     fail "Not enough credit" unless enough_credit?
     @entry_station = station
+    #@journeys.entry_station(station)
   end
 
   def touch_out(station)
     fail "Card not in use" unless @entry_station
-    deduct(MINIMUM_CHARGE)
+    deduct(Journey::MINIMUM_CHARGE)
     @journeys.add_journey({from: entry_station, to: station})
-    #@entry_station = nil
+    @entry_station = nil
   end
 
   private
@@ -44,7 +44,7 @@ class Oystercard
   end
 
   def enough_credit?
-    balance >= MINIMUM_CHARGE
+    balance >= Journey::MINIMUM_CHARGE
   end
 
   def deduct(fare)

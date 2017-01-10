@@ -6,9 +6,12 @@ describe Oystercard do
   let(:exit_station) { double :station }
   let(:journey) { {from: entry_station, to: exit_station} }
 
-  describe "#balance" do
-    it "Checks that initial value = 0" do
+  describe "#initialize" do
+    it "Checks that balance initializes value = 0" do
       expect(subject.balance).to eq 0
+    end
+    it "Checks card limit initializes to £90" do
+      expect(subject.limit).to eq 90
     end
   end
 
@@ -24,11 +27,7 @@ describe Oystercard do
     end
   end
 
-  describe "#limit" do
-    it "Checks card limit is £90" do
-      expect(subject.limit).to eq 90
-    end
-  end
+
 
   describe "#in_journey?" do
     it "Check a new card is not in use" do
@@ -36,7 +35,7 @@ describe Oystercard do
     end
 
     it "Check if a card is in use" do
-      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
+      subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
@@ -44,19 +43,19 @@ describe Oystercard do
 
   describe "#touch_in(entry_station)" do
     it "Changes in_journey status to true when touching in" do
-      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
+      subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to_not eq nil
     end
 
     it "Raises an error if card is already in use" do
-      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
+      subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
 
     it "Expects the card to remember the station departed from" do
-      subject.instance_variable_set(:@balance, Oystercard::MINIMUM_CHARGE)
+      subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to eq entry_station
     end
@@ -81,7 +80,7 @@ describe Oystercard do
     it "Deducts correct fare for the journey" do
       subject.top_up(50)
       subject.touch_in(entry_station)
-      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
+      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-Journey::MINIMUM_CHARGE)
     end
   end
 
