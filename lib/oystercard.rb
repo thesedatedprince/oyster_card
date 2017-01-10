@@ -3,7 +3,8 @@ require_relative 'journey'
 
 class Oystercard
 
-  attr_reader :balance, :limit, :entry_station, :journeys, :currentjourney, :injourney
+  attr_reader :balance, :limit, :journeys, :currentjourney, :injourney
+  # :entry_station,
 
   DEFAULT_BALANCE = 0
   DEFAULT_LIMIT = 90
@@ -33,9 +34,8 @@ class Oystercard
   def touch_out(station)
     fail "Card not in use" unless in_journey?
     @currentjourney.add_journey(station)
-    deduct(Journey::MINIMUM_CHARGE)
-    @journeys << @currentjourney
-    @currentjourney = nil
+    deduct
+    add_journey
     station
   end
 
@@ -53,13 +53,18 @@ class Oystercard
     balance >= Journey::MINIMUM_CHARGE
   end
 
-  def deduct(fare)
+  def deduct
     fail "Insufficient credit available" unless enough_credit?
-    @balance -= fare
+    @balance -= @currentjourney.fare
     @injourney = false
   end
 
   def in_journey?
     @injourney
+  end
+
+  def add_journey
+    @journeys << @currentjourney
+    @currentjourney = nil
   end
 end

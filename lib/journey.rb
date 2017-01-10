@@ -12,8 +12,7 @@ class Journey
     @exit_station = station
   end
 
-
   def fare
-    MINIMUM_CHARGE
+    entry_station == nil ? PENALTY_FARE : MINIMUM_CHARGE
   end
 end

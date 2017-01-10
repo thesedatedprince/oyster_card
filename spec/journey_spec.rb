@@ -13,7 +13,12 @@ describe Journey do
 
   context "It calculates the fare" do
     it "charges the minimum fare" do
-     expect(subject.fare).to eq Journey::MINIMUM_CHARGE
+      subject.instance_variable_set(:@entry_station, teststation)
+      expect(subject.fare).to eq Journey::MINIMUM_CHARGE
+    end
+
+    it "charges the penalty fare when no touch in" do
+      expect(subject.fare).to eq Journey::PENALTY_FARE
     end
   end
 
