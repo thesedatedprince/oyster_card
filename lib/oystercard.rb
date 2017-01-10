@@ -3,7 +3,7 @@ require_relative 'journey'
 
 class Oystercard
 
-  attr_reader :balance, :limit, :entry_station, :journeys, :currentjourney
+  attr_reader :balance, :limit, :entry_station, :journeys, :currentjourney, :injourney
 
   DEFAULT_BALANCE = 0
   DEFAULT_LIMIT = 90
@@ -13,6 +13,7 @@ class Oystercard
     @limit = limit
     #@entry_station = nil
     @journeys = []
+    @injourney = false
   end
 
   def top_up(deposit)
@@ -23,11 +24,12 @@ class Oystercard
 
   def touch_in(station)
 
-    fail "Card already in use" if @currentjourney == nil
+    fail "Card already in use" if in_journey?
     @currentjourney ||= Journey.new(station)
     #.entry_station != station
     #@currentjourney ||= Journey.new(station)
     fail "Not enough credit" unless enough_credit?
+    @injourney = true
 
 
     #@currentjourney.entry_station = station
@@ -36,11 +38,17 @@ class Oystercard
 
   def touch_out(station)
     @currentjourney ||= Journey.new(station)
-    fail "Card not in use" if @currentjourney.entry_station == nil
+    fail "Card not in use" unless in_journey?
     deduct(Journey::MINIMUM_CHARGE)
-    @journeys.add_journey(station)
+    #@journeys.add_journey(station)
+    @injourney = false
     @currentjourney = nil
     #@entry_station = nil
+
+  end
+
+  def in_journey?
+    @injourney
   end
 
   private

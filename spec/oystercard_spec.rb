@@ -29,23 +29,22 @@ describe Oystercard do
 
 
 
-  describe "#in_journey?" do
-    it "Check a new card is not in use" do
-      expect(subject.entry_station).to eq nil
-    end
+  describe "card does not allow new journey if already in use" do
+    #it "Check a new card is not in use" do
+    #  expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
+     #end
 
     it "Check if a card is in use" do
       subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       subject.touch_in(entry_station)
-      expect{subject.entry_station}.to raise_error "Card already in use"
+      expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
   end
 
   describe "#touch_in(entry_station)" do
     it "Changes in_journey status to true when touching in" do
       subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
-      subject.touch_in(entry_station)
-      expect(subject.entry_station).to_not eq nil
+      expect(subject.touch_in(entry_station)).to_not eq nil
     end
 
     it "Raises an error if card is already in use" do
@@ -57,8 +56,7 @@ describe Oystercard do
 
     it "Expects the card to remember the station departed from" do
       subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
-      subject.touch_in(entry_station)
-      expect(subject.entry_station).to eq entry_station
+      expect(subject.touch_in(entry_station)).to eq entry_station
     end
 
     it "Doesn't allow access when there is not enough credit" do
