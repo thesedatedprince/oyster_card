@@ -7,4 +7,7 @@ class Station
     @zone = zone
   end
 
+  def zone
+    @zone
+  end
 end

@@ -1,7 +1,6 @@
 require 'journey'
 
 describe Journey do
-
   let(:teststation) {double :station, name: "entry_station", zone: 1}
   let(:full_journey) {double :journey, entry_station: teststation}
 
@@ -19,6 +18,15 @@ describe Journey do
     it "charges the penalty fare when no touch in" do
       allow(full_journey).to receive(:fare).and_return(Journey::PENALTY_FARE)
       expect(full_journey.fare).to eq Journey::PENALTY_FARE
+    end
+
+    it "charges £1 from zone to zone 1" do
+      # allow(full_journey).to receive(:add_journey).and_return(teststation)
+      # allow(full_journey).to receive(:fare)
+      fare_jounrey = Journey.new(teststation)
+      fare_jounrey.add_journey(teststation)
+
+      expect(fare_jounrey.fare).to eq 1
     end
   end
 
