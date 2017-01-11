@@ -29,12 +29,9 @@ describe Oystercard do
 
   describe "#touch_in(entry_station)" do
     it "Check if a card is in use" do
-      #allow(entry_station).to receive(:zone).and_return(1)
-      #entry_station.instance_variable_set(:@zone, 1)
 
       temp_station = Station.new("Temp Station",1)
       subject.touch_in(temp_station)
-      #subject.touch_out(entry_station)
       expect{subject.touch_in(temp_station)}.to raise_error "Card already in use"
     end
 
@@ -49,12 +46,6 @@ describe Oystercard do
       expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
 
-=begin
-    it "Expects the card to remember the station departed from" do
-      subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
-      expect(subject.touch_in(entry_station)).to eq entry_station
-    end
-=end
 
     it "Doesn't allow access when there is not enough credit" do
       subject.instance_variable_set(:@balance, 0)

@@ -11,7 +11,6 @@ describe Journey do
 
   context "It calculates the fare" do
     it "charges the minimum fare" do
-      #subject.instance_variable_set(:@entry_station, teststation)
       allow(full_journey).to receive(:fare).and_return(Journey::MINIMUM_CHARGE)
       expect(full_journey.fare).to eq Journey::MINIMUM_CHARGE
     end
@@ -22,8 +21,6 @@ describe Journey do
     end
 
     it "charges £1 from zone to zone 1" do
-      # allow(full_journey).to receive(:add_journey).and_return(teststation)
-      # allow(full_journey).to receive(:fare)
       fare_jounrey = Journey.new(teststation)
       fare_jounrey.add_journey(teststation)
 

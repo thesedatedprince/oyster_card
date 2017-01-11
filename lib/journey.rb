@@ -20,7 +20,6 @@ class Journey
   end
 
   def fare
-    # entry_station == nil ? PENALTY_FARE : MINIMUM_CHARGE
     return PENALTY_FARE if no_station?
     return MINIMUM_CHARGE if same_station?
     (entry_station.zone - exit_station.zone).abs
