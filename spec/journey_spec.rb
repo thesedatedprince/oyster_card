@@ -2,6 +2,7 @@ require 'journey'
 
 describe Journey do
   let(:teststation) {double :station, name: "entry_station", zone: 1}
+  let(:teststationtwo) {double :station, name: "exit_station", zone: 5}
   let(:full_journey) {double :journey, entry_station: teststation}
 
   describe "#initialize" do
@@ -27,6 +28,12 @@ describe Journey do
       fare_jounrey.add_journey(teststation)
 
       expect(fare_jounrey.fare).to eq 1
+    end
+
+    it "deducts the difference between zones" do
+      fare_jounrey = Journey.new(teststation)
+      fare_jounrey.add_journey(teststationtwo)
+      expect(fare_jounrey.fare).to eq 4
     end
   end
 

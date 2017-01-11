@@ -4,13 +4,13 @@ class Journey
   MINIMUM_CHARGE = 1
   PENALTY_FARE = 6
 
-  def initialize(entry_station, min_charge = MINIMUM_CHARGE)
+  def initialize(entry_station=nil, min_charge = MINIMUM_CHARGE)
     @entry_station = entry_station
     @min_charge = min_charge
     @log ||= JourneyLog.new(entry_station)
   end
 
-  def add_journey(station)
+  def add_journey(station=nil)
     @exit_station = station
     @log.record_exit(station)
   end
@@ -21,9 +21,18 @@ class Journey
 
   def fare
     # entry_station == nil ? PENALTY_FARE : MINIMUM_CHARGE
+    return PENALTY_FARE if no_station?
+    return MINIMUM_CHARGE if same_station?
+    (entry_station.zone - exit_station.zone).abs
+  end
 
-    return PENALTY_FARE if entry_station == nil
-    return MINIMUM_CHARGE if @entry_station.zone == @exit_station.zone
-    MINIMUM_CHARGE
+  private
+
+  def same_station?
+    entry_station.zone == exit_station.zone
+  end
+
+  def no_station?
+    !entry_station || !exit_station
   end
 end
