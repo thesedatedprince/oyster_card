@@ -13,9 +13,12 @@ class JourneyLog
   end
 
   def store_journey
-    @journeys << ["#{entry_station}", "#{exit_station}"]
+    @journeys << [entry_station, exit_station]
 #    @currentjourney = nil
   #  @journeys
   end
 
+  def journey_status
+    [entry_station, exit_station]
+  end
 end

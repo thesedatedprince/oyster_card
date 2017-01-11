@@ -23,7 +23,6 @@ class Oystercard
   end
 
   def touch_in(station)
-
     fail "Card already in use" if in_journey?
     @currentjourney ||= Journey.new(station)
     fail "Not enough credit" unless enough_credit?
@@ -49,7 +48,8 @@ class Oystercard
   end
 
   def enough_credit?
-    balance >= Journey::MINIMUM_CHARGE
+    # balance >= Journey::MINIMUM_CHARGE
+    balance >= @currentjourney.fare
   end
 
   def deduct_fare
