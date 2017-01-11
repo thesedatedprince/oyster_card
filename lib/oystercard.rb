@@ -1,5 +1,6 @@
 require_relative 'station'
 require_relative 'journey'
+require_relative 'journeylog'
 
 class Oystercard
 
@@ -11,7 +12,7 @@ class Oystercard
   def initialize(balance=DEFAULT_BALANCE, limit=DEFAULT_LIMIT)
     @balance = balance
     @limit = limit
-    @journeys = []
+#    @journeys = []
     @injourney = false
   end
 
@@ -26,15 +27,16 @@ class Oystercard
     fail "Card already in use" if in_journey?
     @currentjourney ||= Journey.new(station)
     fail "Not enough credit" unless enough_credit?
+  #  log.record_journey
     @injourney = true
-    @entry_station = station
+#    @entry_station = station
   end
 
   def touch_out(station)
     fail "Card not in use" unless in_journey?
     @currentjourney.add_journey(station)
     deduct_fare
-    store_journey
+  #  store_journey
     station
   end
 
@@ -59,10 +61,11 @@ class Oystercard
   def in_journey?
     @injourney
   end
-
+=begin
   def store_journey
     @journeys << @currentjourney
     @currentjourney = nil
     @journeys
   end
+=end
 end

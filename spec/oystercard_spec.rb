@@ -45,10 +45,12 @@ describe Oystercard do
       expect{subject.touch_in(entry_station)}.to raise_error "Card already in use"
     end
 
+=begin
     it "Expects the card to remember the station departed from" do
       subject.instance_variable_set(:@balance, Journey::MINIMUM_CHARGE)
       expect(subject.touch_in(entry_station)).to eq entry_station
     end
+=end
 
     it "Doesn't allow access when there is not enough credit" do
       expect{subject.touch_in(entry_station)}.to raise_error "Not enough credit"
