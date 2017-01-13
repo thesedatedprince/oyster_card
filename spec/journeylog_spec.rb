@@ -5,7 +5,9 @@ describe JourneyLog do
   let(:journey_class) {double :journey,new: journey}
   let(:journey) {double :journey,complete?: true, current_journey: {},start_journey: nil}
   let(:start_station) {double :start_station}
-  #let(:current_journey)
+  let(:end_station) {double :end_station}
+
+
   describe "#creation " do
     it 'should have journey_class parameter' do
       expect(journeylog.active_journey).to eq journey
@@ -31,13 +33,23 @@ describe JourneyLog do
   end
 
   describe '#finish ' do
-    it  'should add an exit station to current_journey'
+    it  'should add an exit station to current_journey' do
+      allow(journey).to receive(:finish_journey)
+      subject.start start_station
+      subject.finish end_station
+      expect(journey).to have_received(:finish_journey).with(end_station)
+    end
   end
 
   describe '#current_journey ' do
     it{is_expected.to respond_to :current_journey}
-    it 'should return a current journey if one exists '
-    it 'should create a new journey if current journey is complete '
+    it 'should return a current journey if one exists ' do
+      expect(subject.current_journey).to eq journey
+    end
+
+
+    it 'should create a new journey if current journey is complete ' do
+      
   end
 
   describe '#journeys ' do

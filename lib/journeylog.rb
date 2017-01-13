@@ -15,11 +15,16 @@ class JourneyLog
 		#journey_started? = true
 	end
 
+	def finish station
+		active_journey.finish_journey station
+	end
+
 	def journeys
 		[]
 	end
 
 	def current_journey
+	  @active_journey
 	end
 
 	def journey_started?
