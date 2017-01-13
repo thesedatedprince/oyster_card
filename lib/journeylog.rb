@@ -1,6 +1,6 @@
 require_relative 'journey'
 
-class Journeylog
+class JourneyLog
 
 	def initialize(journey_class = Journey.new)
 
