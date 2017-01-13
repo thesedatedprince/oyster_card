@@ -2,11 +2,12 @@ require_relative 'journey'
 
 class JourneyLog
 
-	attr_reader :active_journey, :entry_station
+	attr_reader :active_journey, :entry_station, :journey_class
 
 	def initialize(journey_class)
 		@journey_class = journey_class
 		@active_journey = journey_class.new
+		@journeys = []
 	end
 
 	def start station
@@ -20,14 +21,17 @@ class JourneyLog
 	end
 
 	def journeys
-		[]
+		@journeys.dup
 	end
 
 	def current_journey
-	  @active_journey
+	#	@active_journey
+	  if @active_journey.complete?
+			@journeys << @active_journey
+			@active_journey = journey_class.new
+		else
+			@active_journey
+		end
 	end
 
-	def journey_started?
-		current_journey.complete? if current_journey
-	end
 end

@@ -12,23 +12,13 @@ describe JourneyLog do
     it 'should have journey_class parameter' do
       expect(journeylog.active_journey).to eq journey
     end
-    xit 'should not have a journey started' do
-      expect(journeylog.journey_started?).to eq false
-    end
   end
 
   describe '#start ' do
-    it{is_expected.to respond_to(:start).with(1)}
 
     it 'should start a new journey' do
       subject.start start_station
       expect(journey).to have_received(:start_journey).with(start_station)
-    end
-
-    xit 'is expected to record an entry station' do
-      allow(journey).to receive(:current_journey).and_return({entry_station: start_station})
-      subject.start
-      expect(journeylog.entry_station).to eq journey.current_journey[:entry_station]
     end
   end
 
@@ -49,14 +39,22 @@ describe JourneyLog do
 
 
     it 'should create a new journey if current journey is complete ' do
-      
+      allow(journey).to receive(:finish_journey)
+      old_journey = subject.current_journey
+      subject.start start_station
+      subject.finish end_station
+      expect(subject.current_journey).not_to eq old_journey
+    end
+
   end
 
   describe '#journeys ' do
     it 'should return an empty array if no journeys have happened' do
       expect(subject.journeys.size).to eq 0
     end
-    xit 'should return a list of all previous journeys without exposing the internal array' do
+    it 'should return a list of all previous journeys without exposing the internal array' do
+      subject.journeys << "Bill"
+      expect(subject.journeys).not_to include("Bill")
     end
   end
 end
